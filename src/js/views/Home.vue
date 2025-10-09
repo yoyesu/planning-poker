@@ -9,19 +9,7 @@
 </template>
 
 <script setup>
-    import { getDatabase, ref, set } from "firebase/database";
 
-    function createRoom() {
-    const db = getDatabase();
-    const roomId = Math.random().toString(36).substring(2, 8);
-    const roomRef = ref(db, `rooms/${roomId}`);
-    set(roomRef, {
-    createdAt: Date.now(),
-    revealed: false,
-    votes: {},
-});
-    window.location.href = `/room/${roomId}`;
-}
 </script>
 
 <style scoped>
