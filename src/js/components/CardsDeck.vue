@@ -9,7 +9,7 @@ const props = defineProps({
 
 <template>
   <div>
-    <div class="option-card" v-for="(value, x) in values" :key="x">{{ value }}</div>
+    <div class="option-card" v-for="(value, x) in values" :key="x" @click="$emit('selectCard', value)">{{ value }}</div>
   </div>
 </template>
 

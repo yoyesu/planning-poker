@@ -1,27 +1,27 @@
 <script setup>
 import {ref as vueRef} from "vue";
-import { getDatabase, ref, set } from "firebase/database";
+import { ref, set } from "firebase/database";
 import {router} from "../view-router.js";
+import {db} from "../firebaseServices.js";
 let roomName = vueRef("");
 let cardsValues = vueRef([0, 1, 2, 3, 4, 5, 6, 7, 9, 9, 10, '?']);
 
 async function createRoom(event) {
   event.preventDefault();
-  // const db = getDatabase();
   const roomId = Math.random().toString(36).substring(2, 8);
-  // const roomRef = ref(db, `rooms/${roomId}`);
-  // set(roomRef, {
-  //   createdAt: Date.now(),
-  //   revealed: false,
-  //   votes: {},
-  //   roomName: roomName || `Room-${roomId}`,
-  //   cardsValues: cardsValues ? cardsValues.split(',').map(v => v.trim()) : [0, 1, 2, 3, 4, 5, 6, 7, 9, 9, 10, '?']
-  // });
+  const roomNameValue = roomName.value || roomId;
+  const roomRef = ref(db, `rooms/${roomId}`);
+  await set(roomRef, {
+    createdAt: Date.now(),
+    votes: {},
+    name: roomNameValue,
+    cardsValues: cardsValues.value
+  });
 
   await router.push({
     path: `/room/${roomId}`,
     query: {
-      name: roomName.value || roomId,
+      name: roomNameValue,
       id: roomId,
       cardsValues: cardsValues.value
     }
