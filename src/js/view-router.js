@@ -1,6 +1,6 @@
 import Room from "./components/Room.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "./views/Home.vue";
+import Home from "./components/Home.vue";
 import CreateRoom from "./components/CreateRoom.vue";
 
 const routes = [

@@ -9,5 +9,6 @@
 <style scoped>
 div {
   color: green;
+  background-color: beige;
 }
 </style>

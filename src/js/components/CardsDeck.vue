@@ -8,11 +8,24 @@ const props = defineProps({
 </script>
 
 <template>
-<div>Hey hey {{ props.values }}</div>
+  <div>
+    <div class="option-card" v-for="(value, x) in values" :key="x">{{ value }}</div>
+  </div>
 </template>
 
 <style scoped>
 div {
-  color: blue;
+  background-color: aqua;
+}
+.option-card {
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin: 5px;
+  background-color: white;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s, transform 0.2s;
 }
 </style>
