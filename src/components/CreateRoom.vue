@@ -1,8 +1,8 @@
 <script setup>
 import {ref as vueRef} from "vue";
 import { ref, set } from "firebase/database";
-import {router} from "../view-router.js";
-import {db} from "../firebaseServices.js";
+import {router} from "../js/view-router.js";
+import {db} from "../firebase/firebaseServices.js";
 let roomName = vueRef("");
 let cardsValues = vueRef([0, 1, 2, 3, 4, 5, 6, 7, 9, 9, 10, '?']);
 

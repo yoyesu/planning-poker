@@ -4,7 +4,7 @@ import {ref as vueRef, onMounted} from 'vue'
 import PokerTable from "./PokerTable.vue";
 import CardsDeck from "./CardsDeck.vue";
 import {ref, onValue, set} from "firebase/database";
-import {db} from "../firebaseServices.js";
+import {db} from "../firebase/firebaseServices.js";
 
 const route = useRoute()
 const parsedCardsValues = vueRef([]);

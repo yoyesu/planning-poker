@@ -1,4 +1,4 @@
-import app from "./firebaseConfig";
+import app from "./firebaseConfig.js";
 import { getDatabase, connectDatabaseEmulator } from "firebase/database";
 
 export const db = getDatabase(app);
