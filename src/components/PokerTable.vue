@@ -8,7 +8,7 @@ const props = defineProps({
 </script>
 
 <template>
-<div>Place your bets
+<div id="poker-table-container">
   <div class="vote-card" v-for="(userData, user) in votes" :key="user">
     <div id="vote-value">{{ userData.cardValue }}</div>
     <div id="vote-user">{{ user }}</div>
@@ -18,6 +18,17 @@ const props = defineProps({
 </template>
 
 <style scoped>
+#poker-table-container {
+  height: 50%;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
 div {
   color: green;
   background-color: beige;

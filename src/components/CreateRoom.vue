@@ -5,7 +5,7 @@ import {router} from "../js/view-router.js";
 import {db} from "../firebase/firebaseServices.js";
 const roomId = Math.random().toString(36).substring(2, 8);
 let roomName = vueRef(roomId);
-let cardsValues = vueRef([0, 1, 2, 3, 4, 5, 6, 7, 9, 9, 10, '?']);
+let cardsValues = vueRef([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, '?']);
 
 async function createRoom(event) {
   event.preventDefault();

@@ -34,7 +34,9 @@ onMounted(() => {
     dbVotes.value = data?.votes || {}
   })
 });
+const selectedValue = vueRef(null);
 function handleVote(cardValue) {
+  selectedValue.value = cardValue;
   console.log("User", userId, "voted:", cardValue);
   const userRef = ref(db, `rooms/${roomId}/votes/${userId}`);
   set(userRef, {cardValue});
@@ -42,11 +44,19 @@ function handleVote(cardValue) {
 </script>
 
 <template>
-<h1>Room: {{ route.query.name }}</h1>
-  <PokerTable v-bind:votes="dbVotes"></PokerTable>
-  <CardsDeck v-bind:values="parsedCardsValues" @selectCard="handleVote"></CardsDeck>
+  <div id="room-main-container">
+    <h1>Room {{ route.query.name }}</h1>
+    <PokerTable v-bind:votes="dbVotes"></PokerTable>
+    <CardsDeck v-bind:values="parsedCardsValues" v-bind:selectedValue="selectedValue" @selectCard="handleVote"></CardsDeck>
+  </div>
 </template>
 
 <style scoped>
-
+#room-main-container {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
 </style>
