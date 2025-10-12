@@ -9,9 +9,9 @@ const props = defineProps({
 
 <template>
 <div id="poker-table-container">
-  <div class="vote-card" v-for="(userData, user) in votes" :key="user">
-    <div id="vote-value">{{ userData.cardValue }}</div>
-    <div id="vote-user">{{ user }}</div>
+  <div class="vote-container" v-for="(userData, user) in votes" :key="user">
+    <div class="vote-value">{{ userData.cardValue }}</div>
+    <div class="vote-user">{{ user }}</div>
   </div>
 </div>
 
@@ -33,15 +33,24 @@ div {
   color: green;
   background-color: beige;
 }
-.vote-card {
-  display: inline-block;
+.vote-container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin: 5px;
+  height: fit-content;
+  width: max-content;
+}
+
+.vote-value {
+  min-width: 20px;
+  min-height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 10px 15px;
   margin: 5px;
-  background-color: white;
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.3s, transform 0.2s;
+  background-color: #ede9e9;
 }
 </style>
