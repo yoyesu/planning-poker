@@ -3,10 +3,12 @@ import {ref as vueRef} from "vue";
 import { ref, set } from "firebase/database";
 import {router} from "../js/view-router.js";
 import {db} from "../firebase/firebaseServices.js";
+import {promptNameSavingAndRedirect} from "../js/utils.js";
+
 const roomId = Math.random().toString(36).substring(2, 8);
 let roomName = vueRef(roomId);
 let cardsValues = vueRef([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, '?']);
-
+promptNameSavingAndRedirect();
 async function createRoom(event) {
   event.preventDefault();
   const roomNameValue = roomName.value || roomId;

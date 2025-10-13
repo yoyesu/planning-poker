@@ -5,6 +5,7 @@
   <nav>
     <RouterLink to="/" class="nav-item"><div class="ni-text">Home</div></RouterLink>
     <RouterLink to="/create-room" class="nav-item"><div class="ni-text">Create Room</div></RouterLink>
+    <RouterLink to="/your-name" class="nav-item"><div class="ni-text">Your Name</div></RouterLink>
   </nav>
 </template>
 

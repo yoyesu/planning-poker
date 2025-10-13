@@ -5,23 +5,16 @@ import PokerTable from "./PokerTable.vue";
 import CardsDeck from "./CardsDeck.vue";
 import {ref, onValue, set} from "firebase/database";
 import {db} from "../firebase/firebaseServices.js";
+import {NAME_KEY, promptNameSavingAndRedirect} from "../js/utils.js";
 
 const route = useRoute()
+promptNameSavingAndRedirect();
 const parsedCardsValues = vueRef([]);
 const dbVotes = vueRef({});
 const roomId = route.query.id
-const userId = localStorage.getItem("userId");
+const userId = localStorage.getItem(NAME_KEY);
 
 onMounted(() => {
-  console.log("my userId from localStorage:", userId)
-  if (!userId) {
-    localStorage.setItem("userId", Math.random().toString(36).slice(2));
-    console.log("New userId generated and saved to localStorage:", localStorage.getItem("userId"))
-  }
-  console.log("Mounted Room.vue")
-  console.log("Room ID:", roomId)
-  console.log("User ID:", userId)
-  console.log("Cards values:", route.query.cardsValues)
   const cardsValues = route.query.cardsValues;
   parsedCardsValues.value = Array.isArray(cardsValues)
       ? cardsValues
