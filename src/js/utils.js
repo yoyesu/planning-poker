@@ -9,9 +9,17 @@ export function saveName(name) {
     localStorage.setItem(NAME_KEY, name);
 }
 
-export function promptNameSavingAndRedirect() {
-    if (!getSavedName()) {
+export async function promptNameSavingAndRedirect() {
+    const name = getSavedName();
+    console.log(`Retrieved name: ${name}`);
+    if (name === null) {
         const currentPath = router.currentRoute.value.fullPath;
-        router.push(`/your-name?redirect=${encodeURIComponent(currentPath)}`);
+        console.log(`Current path: ${currentPath}`);
+        await router.push({
+            path: `your-name`,
+            query: {
+                redirect: currentPath,
+            }
+        });
     }
 }
