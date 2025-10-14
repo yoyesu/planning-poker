@@ -5,10 +5,12 @@ const props = defineProps({
     default: {}
   }
 })
+console.log("Votes prop in PokerTable:", props.votes)
 </script>
 
 <template>
 <div id="poker-table-container">
+  <input type="button" value="Reveal Votes" class="button" @click="$emit('revealVotes',true)">
   <div class="vote-container" v-for="(userData, user) in votes" :key="user">
     <div class="vote-value">{{ userData.cardValue }}</div>
     <div class="vote-user">{{ user }}</div>

@@ -13,7 +13,10 @@ const parsedCardsValues = vueRef([]);
 const dbVotes = vueRef({});
 const roomId = route.query.id
 const userId = localStorage.getItem(NAME_KEY);
-
+const selectedValue = vueRef(null);
+const revealVotes = vueRef(false);
+console.log("reveal votes")
+console.log(revealVotes.value)
 onMounted(() => {
   const cardsValues = route.query.cardsValues;
   parsedCardsValues.value = Array.isArray(cardsValues)
@@ -22,24 +25,36 @@ onMounted(() => {
   const roomRef = ref(db, `rooms/${roomId}`)
   onValue(roomRef, snapshot => {
     const data = snapshot.val()
-    if (!data) alert('Room not found!')
-    else console.log('Room data:', data)
-    dbVotes.value = data?.votes || {}
+    if (!revealVotes.value && data?.votes) {
+      dbVotes.value = Object.fromEntries(
+          Object.keys(data.votes).map(key => [key, { cardValue: "" }])
+      );
+    }
   })
 });
-const selectedValue = vueRef(null);
+
+
 function handleVote(cardValue) {
   selectedValue.value = cardValue;
   console.log("User", userId, "voted:", cardValue);
   const userRef = ref(db, `rooms/${roomId}/votes/${userId}`);
   set(userRef, {cardValue});
 }
+
+function shouldRevealVotes() {
+  revealVotes.value = true;
+  const roomRef = ref(db, `rooms/${roomId}`)
+  onValue(roomRef, snapshot => {
+    const data = snapshot.val()
+    dbVotes.value = data?.votes || {};
+  })
+}
 </script>
 
 <template>
   <div id="room-main-container">
     <h1>Room {{ route.query.name }}</h1>
-    <PokerTable v-bind:votes="dbVotes"></PokerTable>
+    <PokerTable v-bind:votes="dbVotes" @revealVotes="shouldRevealVotes"></PokerTable>
     <CardsDeck v-bind:values="parsedCardsValues" v-bind:selectedValue="selectedValue" @selectCard="handleVote"></CardsDeck>
   </div>
 </template>
