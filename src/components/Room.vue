@@ -54,12 +54,29 @@ function shouldRevealVotes() {
     dbVotes.value = data?.votes || {};
   })
 }
+
+function resetVotesDisplay() {
+  selectedValue.value = null;
+  revealVotes.value = false;
+  hasVoted = false;
+  const roomRef = ref(db, `rooms/${roomId}`)
+  onValue(roomRef, snapshot => {
+    const data = snapshot.val()
+    if (!revealVotes.value && data?.votes) {
+      console.log("Resetting votes display as revealVotes is false")
+      dbVotes.value = Object.fromEntries(
+          Object.keys(data.votes).map(key => [key, { cardValue: "" }])
+      );
+    }
+  })
+}
 </script>
 
 <template>
   <div id="room-main-container">
     <h1>Room {{ route.query.name }}</h1>
     <PokerTable v-bind:votes="dbVotes" @revealVotes="shouldRevealVotes" v-bind:hasVoted="hasVoted"></PokerTable>
+    <input type="button" value="Clear Votes" class="button" @click="resetVotesDisplay">
     <CardsDeck v-bind:values="parsedCardsValues" v-bind:selectedValue="selectedValue" @selectCard="handleVote"></CardsDeck>
   </div>
 </template>
