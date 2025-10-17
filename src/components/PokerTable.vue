@@ -3,6 +3,10 @@ const props = defineProps({
   votes: {
     type: Object,
     default: {}
+  },
+  hasVoted: {
+    type: Boolean,
+    default: false
   }
 })
 console.log("Votes prop in PokerTable:", props.votes)
@@ -12,7 +16,7 @@ console.log("Votes prop in PokerTable:", props.votes)
 <div id="poker-table-container">
   <input type="button" value="Reveal Votes" class="button" @click="$emit('revealVotes',true)">
   <div class="vote-container" v-for="(userData, user) in votes" :key="user">
-    <div class="vote-value">{{ userData.cardValue }}</div>
+    <div class="vote-value" :class="{ voted: hasVoted === true }">{{ userData.cardValue }}</div>
     <div class="vote-user">{{ user }}</div>
   </div>
 </div>
@@ -54,5 +58,9 @@ div {
   padding: 10px 15px;
   margin: 5px;
   background-color: #ede9e9;
+}
+
+.voted {
+  background-color: #9589E8;
 }
 </style>
