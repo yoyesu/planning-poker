@@ -34,6 +34,7 @@ onMounted(() => {
 });
 
 
+
 function handleVote(cardValue) {
   selectedValue.value = cardValue;
   console.log("User", userId, "voted:", cardValue);
