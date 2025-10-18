@@ -7,43 +7,48 @@ import {ref, onValue, set} from "firebase/database";
 import {db} from "../firebase/firebaseServices.js";
 import {NAME_KEY, promptNameSavingAndRedirect} from "../js/utils.js";
 
-const route = useRoute()
 promptNameSavingAndRedirect();
+const route = useRoute()
 const parsedCardsValues = vueRef([]);
+const selectedValue = vueRef(null);
 const dbVotes = vueRef({});
+const revealVotes = vueRef(false);
 const roomId = route.query.id
 const userId = localStorage.getItem(NAME_KEY);
-const selectedValue = vueRef(null);
-const revealVotes = vueRef(false);
 let hasVoted = false;
-onMounted(() => {
-  const cardsValues = route.query.cardsValues;
-  parsedCardsValues.value = Array.isArray(cardsValues)
-      ? cardsValues
-      : cardsValues?.split(',').map((v) => v.trim()) || [];
-  const roomRef = ref(db, `rooms/${roomId}`)
-  set(ref(db, `rooms/${roomId}/votes/${userId}`), {cardValue: ""});
 
-  onValue(roomRef, snapshot => {
+function addUserTodb() {
+  set(ref(db, `rooms/${roomId}/votes/${userId}`), {cardValue: ""});
+}
+
+function parseCardValues() {
+  const cardsRef = ref(db, `rooms/${roomId}/cardsValues`);
+  onValue(cardsRef, snapshot => {
+    const data = snapshot.val();
+    parsedCardsValues.value = Array.isArray(data)
+        ? data
+        : data?.split(',').map((v) => v.trim()) || [];
+  });
+
+}
+
+onMounted(() => {
+  parseCardValues();
+  addUserTodb();
+
+  onValue(ref(db, `rooms/${roomId}`), snapshot => {
     const data = snapshot.val()
-    console.log(data)
-    if (!revealVotes.value && data?.votes) {
-      console.log("Resetting votes display as revealVotes is false")
-      dbVotes.value = Object.fromEntries(
-          Object.keys(data.votes).map(key => [key, { cardValue: "" }])
-      );
-    }
+    buildEmptyVotes(data)
   })
 });
 
 
 
 function handleVote(cardValue) {
-  selectedValue.value = cardValue;
-  console.log("User", userId, "voted:", cardValue);
   const userRef = ref(db, `rooms/${roomId}/votes/${userId}`);
-  set(userRef, {cardValue});
+  selectedValue.value = cardValue;
   hasVoted = true;
+  set(userRef, {cardValue});
 }
 
 function shouldRevealVotes() {
@@ -55,19 +60,22 @@ function shouldRevealVotes() {
   })
 }
 
+function buildEmptyVotes(data) {
+  if (!revealVotes.value && data?.votes) {
+    dbVotes.value = Object.fromEntries(
+        Object.keys(data.votes).map(key => [key, {cardValue: ""}])
+    );
+  }
+}
+
 function resetVotesDisplay() {
+  const roomRef = ref(db, `rooms/${roomId}`)
   selectedValue.value = null;
   revealVotes.value = false;
   hasVoted = false;
-  const roomRef = ref(db, `rooms/${roomId}`)
   onValue(roomRef, snapshot => {
     const data = snapshot.val()
-    if (!revealVotes.value && data?.votes) {
-      console.log("Resetting votes display as revealVotes is false")
-      dbVotes.value = Object.fromEntries(
-          Object.keys(data.votes).map(key => [key, { cardValue: "" }])
-      );
-    }
+    buildEmptyVotes(data)
   })
 }
 </script>
