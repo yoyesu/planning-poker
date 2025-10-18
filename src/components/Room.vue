@@ -83,8 +83,11 @@ function resetVotesDisplay() {
 <template>
   <div id="room-main-container">
     <h1>Room {{ route.query.name }}</h1>
-    <PokerTable v-bind:votes="dbVotes" @revealVotes="shouldRevealVotes" v-bind:hasVoted="hasVoted"></PokerTable>
-    <input type="button" value="Clear Votes" class="button" @click="resetVotesDisplay">
+    <PokerTable v-bind:votes="dbVotes" v-bind:hasVoted="hasVoted"></PokerTable>
+    <section id="buttons-section">
+      <input type="button" value="Reveal Votes" class="button" @click="shouldRevealVotes">
+      <input type="button" value="Clear Votes" class="button" @click="resetVotesDisplay">
+    </section>
     <CardsDeck v-bind:values="parsedCardsValues" v-bind:selectedValue="selectedValue" @selectCard="handleVote"></CardsDeck>
   </div>
 </template>
