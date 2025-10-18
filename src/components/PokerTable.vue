@@ -45,11 +45,14 @@ div {
   margin: 5px;
   height: fit-content;
   width: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .vote-value {
-  min-width: 20px;
-  min-height: 40px;
+  width: 20px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
