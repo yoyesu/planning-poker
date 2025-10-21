@@ -1,5 +1,5 @@
 import Room from "../components/Room.vue";
-import { createRouter, createWebHistory } from "vue-router";
+import {createRouter, createWebHashHistory} from "vue-router";
 import Home from "../components/Home.vue";
 import CreateRoom from "../components/CreateRoom.vue";
 import AddName from "../components/AddName.vue";
@@ -12,6 +12,6 @@ const routes = [
 ];
 
 export const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory('/planning-poker/'),
     routes,
 });
