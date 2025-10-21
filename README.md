@@ -20,3 +20,14 @@ To run the Firebase Emulator, follow these steps:
    ```
    firebase emulators:start
    ```
+   
+## Deploying to Github pages
+Build the project using the command:
+```
+npm run build
+```
+Commit the new dist to the main branch:
+and then deploy to Github pages using the command:
+```
+git subtree push --prefix dist origin gh-pages
+```
