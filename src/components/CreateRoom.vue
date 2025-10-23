@@ -17,7 +17,8 @@ async function createRoom(event) {
     createdAt: Date.now(),
     votes: {},
     name: roomNameValue,
-    cardsValues: cardsValues.value
+    cardsValues: cardsValues.value,
+    revealedVotes: false
   });
 
   await router.push({

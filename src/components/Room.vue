@@ -3,7 +3,7 @@ import {useRoute} from 'vue-router'
 import {ref as vueRef, onMounted} from 'vue'
 import PokerTable from "./PokerTable.vue";
 import CardsDeck from "./CardsDeck.vue";
-import {ref, onValue, set} from "firebase/database";
+import {ref, onValue, set, update} from "firebase/database";
 import {db} from "../firebase/firebaseServices.js";
 import {NAME_KEY, promptNameSavingAndRedirect} from "../js/utils.js";
 
@@ -36,8 +36,15 @@ onMounted(() => {
   addUserTodb();
 
   onValue(ref(db, `rooms/${roomId}`), snapshot => {
-    const data = snapshot.val()
-    buildEmptyVotes(data)
+    const data = snapshot.val();
+    revealVotes.value = data?.revealVotes || false;
+    if (data?.revealVotes) {
+      console.log("displaying real votes")
+      dbVotes.value = data.votes || {};
+    } else {
+      console.log("building empty votes")
+      dbVotes.value = buildEmptyVotes(data);
+    }
   })
 });
 
@@ -51,29 +58,24 @@ function handleVote(cardValue) {
 }
 
 function shouldRevealVotes() {
-  revealVotes.value = true;
   const roomRef = ref(db, `rooms/${roomId}`)
-  onValue(roomRef, snapshot => {
-    const data = snapshot.val()
-    dbVotes.value = data?.votes || {};
-  })
+  update(roomRef, {"revealVotes": true });
 }
 
 function buildEmptyVotes(data, reset = false) {
-  if (!revealVotes.value && data?.votes) {
-    dbVotes.value = Object.fromEntries(
+    return Object.fromEntries(
         Object.keys(data.votes).map(key => [key, {cardValue: "", hasVoted: reset ? false : data.votes[key].hasVoted}])
     );
-  }
 }
 
 function resetVotesDisplay() {
   const roomRef = ref(db, `rooms/${roomId}`)
+  update(roomRef, { "revealVotes": false });
   selectedValue.value = null;
-  revealVotes.value = false;
   onValue(roomRef, snapshot => {
     const data = snapshot.val()
-    buildEmptyVotes(data, true)
+    dbVotes.value = buildEmptyVotes(data, true)
+    update(roomRef, {votes: dbVotes.value})
   })
 }
 </script>
