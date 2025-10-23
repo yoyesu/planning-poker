@@ -1,14 +1,8 @@
 <script setup>
-import getSavedName from "../js/utils.js";
-
 const props = defineProps({
   votes: {
     type: Object,
     default: {}
-  },
-  hasVoted: {
-    type: Boolean,
-    default: false
   }
 })
 </script>
@@ -16,7 +10,7 @@ const props = defineProps({
 <template>
 <div id="poker-table-container">
   <div class="vote-container" v-for="(userData, user) in votes" :key="user">
-    <div class="vote-value" :class="{ voted: hasVoted === true && user === getSavedName()}">{{ userData.cardValue }}</div>
+    <div class="vote-value" :class="{ voted: userData.hasVoted === true && userData.cardValue === ''}">{{ userData.cardValue }}</div>
     <div class="vote-user">{{ user }}</div>
   </div>
 </div>

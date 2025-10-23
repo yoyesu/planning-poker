@@ -15,10 +15,9 @@ const dbVotes = vueRef({});
 const revealVotes = vueRef(false);
 const roomId = route.query.id
 const userId = localStorage.getItem(NAME_KEY);
-let hasVoted = false;
 
 function addUserTodb() {
-  set(ref(db, `rooms/${roomId}/votes/${userId}`), {cardValue: ""});
+  set(ref(db, `rooms/${roomId}/votes/${userId}`), {cardValue: "", hasVoted: false});
 }
 
 function parseCardValues() {
@@ -46,9 +45,9 @@ onMounted(() => {
 
 function handleVote(cardValue) {
   const userRef = ref(db, `rooms/${roomId}/votes/${userId}`);
-  selectedValue.value = cardValue;
-  hasVoted = true;
-  set(userRef, {cardValue});
+  selectedValue.value = cardValue.toString();
+  const hasVoted = true;
+  set(userRef, {cardValue, hasVoted});
 }
 
 function shouldRevealVotes() {
@@ -60,10 +59,10 @@ function shouldRevealVotes() {
   })
 }
 
-function buildEmptyVotes(data) {
+function buildEmptyVotes(data, reset = false) {
   if (!revealVotes.value && data?.votes) {
     dbVotes.value = Object.fromEntries(
-        Object.keys(data.votes).map(key => [key, {cardValue: ""}])
+        Object.keys(data.votes).map(key => [key, {cardValue: "", hasVoted: reset ? false : data.votes[key].hasVoted}])
     );
   }
 }
@@ -72,10 +71,9 @@ function resetVotesDisplay() {
   const roomRef = ref(db, `rooms/${roomId}`)
   selectedValue.value = null;
   revealVotes.value = false;
-  hasVoted = false;
   onValue(roomRef, snapshot => {
     const data = snapshot.val()
-    buildEmptyVotes(data)
+    buildEmptyVotes(data, true)
   })
 }
 </script>
@@ -83,7 +81,7 @@ function resetVotesDisplay() {
 <template>
   <div id="room-main-container">
     <h1>Room {{ route.query.name }}</h1>
-    <PokerTable v-bind:votes="dbVotes" v-bind:hasVoted="hasVoted"></PokerTable>
+    <PokerTable v-bind:votes="dbVotes"></PokerTable>
     <section id="buttons-section">
       <input type="button" value="Reveal Votes" class="button" @click="shouldRevealVotes">
       <input type="button" value="Clear Votes" class="button" @click="resetVotesDisplay">
