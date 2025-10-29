@@ -24,21 +24,21 @@ const props = defineProps({
 <style scoped>
 #poker-table-container {
   height: 50%;
-  border: 1px solid black;
+  border-radius: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px;
-  width: 100%;
+  width: 75%;
   box-sizing: border-box;
   overflow-x: auto;
+  margin-bottom: 2%;
 }
 div {
-  color: green;
-  background-color: beige;
+  color: #430671;
+  background-color: rgb(217, 197, 255);
 }
 .vote-container {
-  border: 1px solid #ccc;
   border-radius: 8px;
   margin: 5px;
   height: fit-content;

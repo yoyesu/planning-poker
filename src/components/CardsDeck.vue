@@ -24,7 +24,6 @@ const props = defineProps({
 <style scoped>
 #cards-deck-container {
   height: 50%;
-  border: 1px solid black;
   display: flex;
   justify-content: center;
   padding: 5%;
@@ -52,5 +51,9 @@ const props = defineProps({
   color: white;
   transform: scale(1.15);
   transition: all 0.2s ease;
+}
+
+.option-card:hover {
+  background-color: #d3caff;
 }
 </style>

@@ -7,16 +7,15 @@ import {promptNameSavingAndRedirect} from "../js/utils.js";
 
 promptNameSavingAndRedirect();
 const roomId = Math.random().toString(36).substring(2, 8);
-let roomName = vueRef(roomId);
+let roomName = vueRef(`Room ${roomId}`);
 let cardsValues = vueRef([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, '?']);
 async function createRoom(event) {
   event.preventDefault();
-  const roomNameValue = roomName.value || roomId;
   const roomRef = ref(db, `rooms/${roomId}`);
   await set(roomRef, {
     createdAt: Date.now(),
     votes: {},
-    name: roomNameValue,
+    name: roomName.value,
     cardsValues: cardsValues.value,
     revealedVotes: false
   });
@@ -24,7 +23,6 @@ async function createRoom(event) {
   await router.push({
     path: `/room/${roomId}`,
     query: {
-      name: roomNameValue,
       id: roomId
     }
   });

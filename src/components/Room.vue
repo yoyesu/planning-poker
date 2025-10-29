@@ -15,6 +15,7 @@ const dbVotes = vueRef({});
 const revealVotes = vueRef(false);
 const roomId = route.query.id
 const userId = localStorage.getItem(NAME_KEY);
+let roomName = roomId;
 
 function addUserTodb() {
   set(ref(db, `rooms/${roomId}/votes/${userId}`), {cardValue: "", hasVoted: false});
@@ -37,7 +38,7 @@ onMounted(() => {
     const data = snapshot.val();
     revealVotes.value = data?.revealVotes || false;
     dbVotes.value = data.votes || {};
-
+    roomName = data.name;
   })
 });
 
@@ -73,7 +74,7 @@ async function resetVotesDisplay() {
 
 <template>
   <div id="room-main-container">
-    <h1>Room {{ route.query.name }}</h1>
+    <h1>{{ roomName }}</h1>
     <PokerTable v-bind:votes="dbVotes" v-bind:revealVotes="revealVotes"></PokerTable>
     <section id="buttons-section">
       <input type="button" value="Reveal Votes" class="button" @click="shouldRevealVotes">
@@ -85,10 +86,29 @@ async function resetVotesDisplay() {
 
 <style scoped>
 #room-main-container {
-  border: 1px solid black;
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 100vh;
+}
+
+input {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #9589E8;
+  border: 1px solid #FFA8A3;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+input:hover {
+  cursor: pointer;
+  background-color: #7e75c1;
+}
+
+input:active {
+  box-shadow: 0 5px #FFA8A3;
+  transform: translateY(4px);
 }
 </style>

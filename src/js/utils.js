@@ -2,7 +2,7 @@ import {router} from "./view-router.js";
 import {get} from "firebase/database";
 
 export const NAME_KEY = 'myName';
-export default function getSavedName() {
+function getSavedName() {
     return localStorage.getItem(NAME_KEY);
 }
 
