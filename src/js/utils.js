@@ -1,4 +1,5 @@
 import {router} from "./view-router.js";
+import {get} from "firebase/database";
 
 export const NAME_KEY = 'myName';
 export default function getSavedName() {
@@ -22,4 +23,9 @@ export async function promptNameSavingAndRedirect() {
             }
         });
     }
+}
+
+export async function getFromDatabase(ref) {
+    const snapshot = await get(ref);
+    return snapshot.val();
 }
