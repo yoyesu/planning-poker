@@ -21,7 +21,7 @@ function addUserTodb() {
   set(ref(db, `rooms/${roomId}/votes/${userId}`), {cardValue: "", hasVoted: false});
 }
 
-async function parseCardValues() {
+function parseCardValues() {
   const cardsRef = ref(db, `rooms/${roomId}/cardsValues`);
   getFromDatabase(cardsRef).then(data => {
     parsedCardsValues.value = Array.isArray(data)
@@ -56,19 +56,20 @@ function shouldRevealVotes() {
   update(roomRef, {"revealVotes": true });
 }
 
-function buildEmptyVotes(data, reset = false) {
+function buildEmptyVotes(data) {
     return Object.fromEntries(
-        Object.keys(data.votes).map(key => [key, {cardValue: "", hasVoted: reset ? false : data.votes[key].hasVoted}])
+        Object.keys(data.votes).map(key => [key, {cardValue: "", hasVoted: false}])
     );
 }
 
-async function resetVotesDisplay() {
+function resetVotesDisplay() {
   const roomRef = ref(db, `rooms/${roomId}`)
   selectedValue.value = null;
   getFromDatabase(roomRef).then(data => {
-    dbVotes.value = buildEmptyVotes(data, true);
+    let emptyVotes = buildEmptyVotes(data)
+    dbVotes.value = emptyVotes;
+    update(roomRef, { "votes": emptyVotes, "revealVotes": false });
   });
-  await update(roomRef, { votes: dbVotes.value, "revealVotes": false });
 }
 </script>
 
